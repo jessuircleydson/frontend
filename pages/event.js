@@ -1,40 +1,35 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, FlatList,
-    SafeAreaView, Dimensions, ActivityIndicator, Button, TouchableHighlight } from 'react-native';
+import {
+    StyleSheet, Text, View, FlatList,
+    SafeAreaView, Dimensions, ActivityIndicator, Button, TouchableHighlight
+} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-/* const Item = ({ name }) => (
-    <View style={styles.item}>
-        <Text style={styles.name}>{name}</Text>
-    </View>
-);
- */
-export default function Events({ navigation }) {
-    const _onPressButton = (id) => {
-        console.log(id)
-        navigation.navigate('EventDetail', {
-            itemId: id,
-        });
-    }
-    const Item = ({ name, id }) => (
-        <TouchableHighlight onPress={() => {_onPressButton(id)}} underlayColor="white">
 
+
+
+export default function EventDetail({ route, navigation }) {
+
+    const { itemId } = route.params;
+
+    const Item = ({ name, price, section }) => (
             <View style={styles.item}>
-                <Text style={styles.name}>{name}</Text>
+            <Text style={styles.name}>{name}</Text>
+            <Text style={styles.price}>{price}</Text>
+            <Text style={styles.section}>{section}</Text>
             </View>
-        </TouchableHighlight>
     );
     const renderItem = ({ item }) => (
-        <Item name={item.name} id={item.id} />
+        <Item name={item.name} price={item.price} section={item.section} />
     );
 
     const [isLoading, setLoading] = useState(true);
     const [data, setData] = useState([]);
 
     useEffect(() => {
-        fetch('http://10.0.0.14:8080/api/events')
+        fetch('http://10.0.0.14:8080/api/events/' + itemId)
             .then((response) => response.json())
             .then((json) => setData(json.events))
             .catch((error) => console.error(error))
@@ -43,29 +38,36 @@ export default function Events({ navigation }) {
     return (
         <SafeAreaView style={styles.container} >
             <StatusBar style="auto" />
-            
+
             <View style={styles.container}>
-                <View >
+                <View  >
+                    <Text style={styles.eventText}>
+                        Nome: {data.name}
+                    </Text>
+                    <Text style={styles.eventText}>
+                        data: {data.date}
+                    </Text>
+                    <Text style={styles.eventText}>
+                        Categoria: {data.category}
+                    </Text>
+                    <Text style={styles.eventText}>
+                        Descrição: {data.description}
+                    </Text>
+
 
                     <Text style={styles.eventText}>
-                        EVENTOS
+                        Ingressos
                     </Text>
-                    <Button
-                        
-                        title="Adicionar Evento"
-                        onPress={() => navigation.navigate('AdicionarEvento')}
-                    />      
-                </View>
-                {isLoading ? <ActivityIndicator /> : (
+
                     <FlatList
                         style={styles.listF}
                         inverted={true}
-                        data={data}
+                        data={data.has_tickets}
                         renderItem={renderItem}
                         extraData={this}
                         keyExtractor={item => item.id.toString()}
                     />
-                )}
+                </View>
             </View>
 
         </SafeAreaView>
@@ -88,7 +90,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         marginBottom: 30,
         color: '#fff',
-        textAlign:'center',
+        textAlign: 'center',
     },
     item: {
         width: Dimensions.get('window').width,
@@ -103,7 +105,7 @@ const styles = StyleSheet.create({
         color: '#fff',
 
     },
-    listF: {
-        marginTop: 10,
+    buttonNavi: {
+        marginBottom: 10,
     }
 });

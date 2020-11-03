@@ -1,24 +1,51 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, 
-    SafeAreaView, Dimensions, ActivityIndicator, TextInput, Button} from 'react-native';
+    SafeAreaView, Dimensions, ActivityIndicator, TextInput, Button, ScrollView} from 'react-native';
 
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+    
 
-export default function CreateEvent() {
+export default function CreateEvent({ navigation }) {
     const [name, onChangeTextName] = React.useState('Nome');
     const [date, onChangeTextDate] = React.useState('Data');
     const [category, onChangeTextCategory] = React.useState('Categoria');
     const [description, onChangeTextDescription] = React.useState('Description');
+
+    const [success, setSuccess] = useState([]);
+
+    const creatNewEvent = () => {
+        fetch('http://10.0.0.14:8080/api/events', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: name,
+                date: date,
+                category: category,
+                description: description,
+            })
+        }).then((response) => response.json())
+            .then((json) => {
+                navigation.navigate('Eventos');
+            })
+            .catch((error) => {
+                console.error(error);
+            });;
+    }
    
     return (
         <SafeAreaView style={styles.container} >
+            <ScrollView>
             <StatusBar style="auto" />
 
             <View style={styles.container}>
                 <Text style={styles.eventText}>
                     CRIAR NOVO EVENTO
                 </Text>
-
                 <View style={styles.inputView} >
 
                     <TextInput
@@ -54,10 +81,12 @@ export default function CreateEvent() {
                 <Button
                     style={styles.buttonForm}
                     title="Criar"
-                    onPress={() => navigation.navigate('Eventos')}
+                    onPress={() =>
+                        creatNewEvent()                        
+                    }
                 />
             </View>
-
+        </ScrollView>
         </SafeAreaView>
     );
 }

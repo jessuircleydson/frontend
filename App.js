@@ -6,6 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Login from './pages/auth/login';
 import Events from './pages/events';
 import CreateEvent from './pages/createEvent';
+import EventDetail from './pages/event';
 
 const Stack = createStackNavigator();
 
@@ -17,6 +18,7 @@ export default function App() {
         <Stack.Screen name ="Login" component={Login} />
         <Stack.Screen name="Eventos" component={Events} />
         <Stack.Screen name="AdicionarEvento" component={CreateEvent} options={{ title: 'Adicionar Evento' }}/>
+        <Stack.Screen name="EventDetail" component={EventDetail} options={{ title: 'Detalhe do Evento' }}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

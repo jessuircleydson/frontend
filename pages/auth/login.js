@@ -4,6 +4,8 @@ import { StyleSheet, Button, SafeAreaView, View, Text, TextInput, Dimensions } f
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
+
+
 export default function Login({ navigation }) {
     const [email, onChangeText] = React.useState('Email');
     const [pass, onChangeTextPass] = React.useState('Senha');

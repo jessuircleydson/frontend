@@ -6,6 +6,7 @@ import {
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { HOST, PORT } from '../services/config';
 
 
 
@@ -28,8 +29,10 @@ export default function EventDetail({ route, navigation }) {
     const [isLoading, setLoading] = useState(true);
     const [data, setData] = useState([]);
 
+    const url = 'http://' + HOST + ':' + PORT + '/api/events' + itemId;
+
     useEffect(() => {
-        fetch('http://10.0.0.14:8080/api/events/' + itemId)
+        fetch(url)
             .then((response) => response.json())
             .then((json) => setData(json.events))
             .catch((error) => console.error(error))

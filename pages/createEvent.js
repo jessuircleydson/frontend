@@ -5,6 +5,8 @@ import { StyleSheet, Text, View,
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { HOST, PORT } from '../services/config';
+
     
 
 export default function CreateEvent({ navigation }) {
@@ -15,8 +17,9 @@ export default function CreateEvent({ navigation }) {
 
     const [success, setSuccess] = useState([]);
 
+    const url = 'http://' + HOST + ':' + PORT + '/api/events';
     const creatNewEvent = () => {
-        fetch('http://10.0.0.14:8080/api/events', {
+        fetch(url, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
